@@ -1,0 +1,15 @@
+# macOS noise
+.DS_Store
+# Node/pip caches if they sneak in
+node_modules/
+__pycache__/
+*.pyc
+
+# Don’t accidentally commit secrets
+*.pem
+*.key
+*.crt
+*.p12
+.oci/config
+.aws/
+.kube/config*
