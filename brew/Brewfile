@@ -57,3 +57,9 @@ cask "font-hack-nerd-font"
 # ---------- Java (common build/runtime need) ----------
 # If you build Java-backed tools or SDKs:
 # cask "temurin"
+
+# ----------- Database tools -----------
+brew "postgresql"
+brew "mysql"
+brew "redis"
+brew "duckdb"
