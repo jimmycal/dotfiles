@@ -155,4 +155,5 @@ if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-history-subst
   bindkey '^[[B' history-substring-search-down
 fi
 
+export PATH="/opt/homebrew/bin:$PATH"
 # End of file

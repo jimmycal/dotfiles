@@ -10,10 +10,10 @@ brew list git >/dev/null 2>&1 || brew install git
 brew list stow >/dev/null 2>&1 || brew install stow
 
 echo "[2/4] Stowing dotfiles..."
-stow -v zsh brew -t "$HOME"
+stow -v zsh brew -t "$HOME/projects/dotfiles" || true
 
 echo "[3/4] Installing Brewfile packages..."
-brew bundle --file "$HOME/.Brewfile" || true
+brew bundle --file "$HOME/projects/dotfiles/brew/Brewfile" || true
 
 echo "[4/4] Reloading shell..."
 exec zsh -l
