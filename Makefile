@@ -1,13 +1,16 @@
-.PHONY: bootstrap stow unstow update
+.PHONY: bootstrap stow unstow update sync
 
 bootstrap:
-\t./bootstrap.sh
+	./bootstrap.sh
 
 stow:
-\tstow -v zsh brew -t $(HOME)
+	stow -v zsh brew git starship -t $(HOME)
 
 unstow:
-\tstow -Dv zsh brew -t $(HOME)
+	stow -Dv zsh brew git starship -t $(HOME)
 
 update:
-\tgit pull --rebase && brew update && brew upgrade
+	git pull --rebase && brew update && brew upgrade && brew bundle --file brew/.Brewfile
+
+sync:
+	git add -A && git commit -m "chore: sync dotfiles" && git push

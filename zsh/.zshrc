@@ -5,9 +5,12 @@
 ##############################################
 
 ##############################################
-# 0) Shell options (safe defaults)
+# 0) Shell options & history
 ##############################################
-setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY HIST_REDUCE_BLANKS
 
 ##############################################
 # 1) Homebrew initialization (Apple Silicon friendly)
@@ -43,10 +46,16 @@ export PIP_REQUIRE_VIRTUALENV=true
 alias pip!='PIP_REQUIRE_VIRTUALENV="" pip'
 
 ##############################################
-# 4) pipx for global Python-backed CLIs (black, ruff, awscli, httpie, etc.)
+# 4) pipx for global Python-backed CLIs (black, ruff, httpie, etc.)
 ##############################################
 # `brew install pipx && pipx ensurepath` will place binaries in ~/.local/bin
 export PATH="$HOME/.local/bin:$PATH"
+
+##############################################
+# 4a) Editor defaults
+##############################################
+export EDITOR="code --wait"
+export VISUAL="$EDITOR"
 
 ##############################################
 # 5) direnv (per-project environment variables)
@@ -85,15 +94,11 @@ export PATH="$HOME/bin:$PATH"
 ##############################################
 # 9) Oracle CLI autocomplete (if locally installed)
 ##############################################
-# Guarded to avoid errors on machines without this path
-if [[ -f "$HOME/lib/oracle-cli/lib/python3.9/site-packages/oci_cli/bin/oci_autocomplete.sh" ]]; then
-  source "$HOME/lib/oracle-cli/lib/python3.9/site-packages/oci_cli/bin/oci_autocomplete.sh"
-fi
-
-##############################################
-# 10) fzf key bindings and completion (if installed)
-##############################################
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+# Dynamic glob — works across any Python version
+for _oci_ac in "$HOME"/lib/oracle-cli/lib/python*/site-packages/oci_cli/bin/oci_autocomplete.sh; do
+  [[ -f "$_oci_ac" ]] && source "$_oci_ac" && break
+done
+unset _oci_ac
 
 ##############################################
 # 11) Helpful helpers
@@ -106,11 +111,15 @@ rmvenv() { deactivate 2>/dev/null; rm -rf .venv; }
 usepy()  { pyenv install -s "$1" && pyenv local "$1" && python -V; }
 
 ##############################################
-# 12) Prompt & readability (colors, glyphs, UX)
+# 10) fzf key bindings and completion (if installed)
+##############################################
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+
+##############################################
+# 11) Prompt & readability (colors, glyphs, UX)
 # - Starship prompt (fast, cross-shell)
 # - zsh-syntax-highlighting (valid cmd = green, invalid = red)
 # - zsh-autosuggestions (ghost-text based on history)
-# - fzf bindings (Ctrl-R history search, etc.)
 # - lsd (colorful ls replacement)
 ##############################################
 # Starship prompt (requires: brew install starship)
@@ -128,9 +137,6 @@ if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-autosuggestio
   source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
-# fzf keybindings (requires: brew install fzf && $(brew --prefix)/opt/fzf/install)
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
-
 # lsd: modern, colored ls (requires: brew install lsd)
 # Shows file types (-F) and groups directories first for readability
 if command -v lsd >/dev/null; then
@@ -138,7 +144,7 @@ if command -v lsd >/dev/null; then
 fi
 
 ##############################################
-# 13) Navigation improvements
+# 12) Navigation improvements
 # - zoxide: smarter cd with frecency
 ##############################################
 if command -v zoxide >/dev/null; then
@@ -147,7 +153,7 @@ if command -v zoxide >/dev/null; then
 fi
 
 ##############################################
-# 14) History search (substring with arrow keys)
+# 13) History search (substring with arrow keys)
 ##############################################
 if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh" ]]; then
   source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
@@ -155,5 +161,4 @@ if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-history-subst
   bindkey '^[[B' history-substring-search-down
 fi
 
-export PATH="/opt/homebrew/bin:$PATH"
 # End of file

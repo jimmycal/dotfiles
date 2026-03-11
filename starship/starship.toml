@@ -1,0 +1,67 @@
+# Starship prompt configuration
+# Docs: https://starship.rs/config/
+
+# Wait up to 500ms for commands to complete before showing a stale prompt
+command_timeout = 500
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$terraform\
+$kubernetes\
+$cmd_duration\
+$line_break\
+$character"""
+
+[directory]
+truncation_length = 4
+truncate_to_repo  = true
+style             = "bold cyan"
+
+[git_branch]
+symbol = " "
+style  = "bold purple"
+
+[git_status]
+ahead  = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+conflicted = "="
+modified   = "!${count}"
+untracked  = "?${count}"
+staged     = "+${count}"
+deleted    = "✘${count}"
+
+[python]
+symbol           = " "
+pyenv_version_name = true
+style            = "bold yellow"
+
+[nodejs]
+symbol = " "
+style  = "bold green"
+
+[terraform]
+format = "via [$symbol$workspace]($style) "
+symbol = "󱁢 "
+style  = "bold 105"
+
+[kubernetes]
+disabled = false
+symbol   = "☸ "
+style    = "bold blue"
+
+[cmd_duration]
+min_time           = 2000
+format             = "took [$duration]($style) "
+style              = "bold yellow"
+show_notifications = false
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol   = "[❯](bold red)"

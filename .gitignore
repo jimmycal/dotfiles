@@ -6,6 +6,7 @@ __pycache__/
 *.pyc
 
 # Don’t accidentally commit secrets
+secrets/
 *.pem
 *.key
 *.crt
@@ -13,3 +14,5 @@ __pycache__/
 .oci/config
 .aws/
 .kube/config*
+*.env
+.envrc.local
