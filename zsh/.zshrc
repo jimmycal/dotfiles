@@ -1,6 +1,6 @@
 ##############################################
 # ~/.zshrc — Development-focused configuration
-# Optimized for: Homebrew + pyenv + nvm + pipx
+# Optimized for: Homebrew + pyenv + nvm + rbenv + pipx
 # This file is structured in clearly labeled sections.
 ##############################################
 
@@ -19,6 +19,8 @@ setopt HIST_IGNORE_ALL_DUPS SHARE_HISTORY HIST_REDUCE_BLANKS
 ##############################################
 if [[ -d /opt/homebrew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -d /usr/local/Homebrew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
 fi
 
 ##############################################
@@ -66,7 +68,6 @@ fi
 
 ##############################################
 # 6) Node.js via nvm (installed via Homebrew)
-# - Loads nvm from the Homebrew prefix if available
 ##############################################
 export NVM_DIR="$HOME/.nvm"
 if command -v brew >/dev/null; then
@@ -79,29 +80,53 @@ if command -v brew >/dev/null; then
 fi
 
 ##############################################
-# 7) Java (OpenJDK via Homebrew)
+# 7) Ruby via rbenv (installed via Homebrew)
+##############################################
+if command -v rbenv >/dev/null; then
+  eval "$(rbenv init - zsh)"
+fi
+
+##############################################
+# 8) Java (OpenJDK via Homebrew)
 # - Adds OpenJDK bin to PATH if installed
+# - To pin to JDK 21 LTS, swap "openjdk" for "openjdk@21" below
 ##############################################
 if command -v brew >/dev/null && [[ -d "$(brew --prefix)/opt/openjdk" ]]; then
   export PATH="$(brew --prefix)/opt/openjdk/bin:$PATH"
 fi
 
 ##############################################
-# 8) User-local bin directory
+# 9) GNU userland (gnu-sed -> sed, etc.)
+# - Put GNU coreutils ahead of BSD versions for portable scripts
+##############################################
+if command -v brew >/dev/null && [[ -d "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" ]]; then
+  export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:$PATH"
+fi
+
+##############################################
+# 10) User-local bin directory
 ##############################################
 export PATH="$HOME/bin:$PATH"
 
 ##############################################
-# 9) Oracle CLI autocomplete (if locally installed)
+# 11) Oracle CLI autocomplete (if locally installed)
+# - Version-agnostic glob so it works across Python versions
+# - (N) = nullglob: if nothing matches, expand to nothing instead of erroring
+#   (without (N), zsh's default `nomatch` aborts the rest of .zshrc)
 ##############################################
-# Dynamic glob — works across any Python version
-for _oci_ac in "$HOME"/lib/oracle-cli/lib/python*/site-packages/oci_cli/bin/oci_autocomplete.sh; do
-  [[ -f "$_oci_ac" ]] && source "$_oci_ac" && break
+for _oci in "$HOME"/lib/oracle-cli/lib/python*/site-packages/oci_cli/bin/oci_autocomplete.sh(N); do
+  source "$_oci"
+  break
 done
-unset _oci_ac
+unset _oci
 
 ##############################################
-# 11) Helpful helpers
+# 12) fzf key bindings and completion
+##############################################
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+
+##############################################
+# 13) Helpful helpers
 # - mkvenv: create and activate .venv from current pyenv Python
 # - rmvenv: remove the local .venv safely
 # - usepy: ensure a specific Python version exists and pin it in this repo
@@ -111,40 +136,34 @@ rmvenv() { deactivate 2>/dev/null; rm -rf .venv; }
 usepy()  { pyenv install -s "$1" && pyenv local "$1" && python -V; }
 
 ##############################################
-# 10) fzf key bindings and completion (if installed)
-##############################################
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
-
-##############################################
-# 11) Prompt & readability (colors, glyphs, UX)
+# 14) Prompt & readability (colors, glyphs, UX)
 # - Starship prompt (fast, cross-shell)
 # - zsh-syntax-highlighting (valid cmd = green, invalid = red)
 # - zsh-autosuggestions (ghost-text based on history)
 # - lsd (colorful ls replacement)
 ##############################################
-# Starship prompt (requires: brew install starship)
+# Starship prompt
 if command -v starship >/dev/null; then
   eval "$(starship init zsh)"
 fi
 
-# Syntax highlighting (requires: brew install zsh-syntax-highlighting)
+# Syntax highlighting
 if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
   source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
-# Autosuggestions (requires: brew install zsh-autosuggestions)
+# Autosuggestions
 if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
   source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
-# lsd: modern, colored ls (requires: brew install lsd)
-# Shows file types (-F) and groups directories first for readability
+# lsd: modern, colored ls
 if command -v lsd >/dev/null; then
   alias ls='lsd -F --group-dirs=first'
 fi
 
 ##############################################
-# 12) Navigation improvements
+# 15) Navigation improvements
 # - zoxide: smarter cd with frecency
 ##############################################
 if command -v zoxide >/dev/null; then
@@ -153,7 +172,7 @@ if command -v zoxide >/dev/null; then
 fi
 
 ##############################################
-# 13) History search (substring with arrow keys)
+# 16) History search (substring with arrow keys)
 ##############################################
 if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh" ]]; then
   source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
@@ -161,4 +180,17 @@ if command -v brew >/dev/null && [[ -f "$(brew --prefix)/share/zsh-history-subst
   bindkey '^[[B' history-substring-search-down
 fi
 
-# End of file
+##############################################
+# 17) Bun (JavaScript runtime — installed via official installer)
+##############################################
+export BUN_INSTALL="$HOME/.bun"
+[[ -d "$BUN_INSTALL/bin" ]] && export PATH="$BUN_INSTALL/bin:$PATH"
+[[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
+
+##############################################
+# 18) Machine-local overrides & secrets
+# - Anything in ~/.zshrc.local is sourced last (kept out of version control).
+# - Use it for API keys, work-specific PATHs, host-specific aliases, etc.
+# - Example:  export ANTHROPIC_API_KEY="$(op read 'op://Personal/Anthropic API/credential')"
+##############################################
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local

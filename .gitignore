@@ -5,7 +5,7 @@ node_modules/
 __pycache__/
 *.pyc
 
-# Don’t accidentally commit secrets
+# Don't accidentally commit secrets
 secrets/
 *.pem
 *.key
@@ -16,3 +16,6 @@ secrets/
 .kube/config*
 *.env
 .envrc.local
+
+# Machine-local overrides (sourced by .zshrc but never committed)
+*.local
