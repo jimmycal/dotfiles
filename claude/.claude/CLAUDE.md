@@ -27,3 +27,18 @@
 - Check memory/recent-memory.md at session start for rolling context
 - Log new decisions, people, and terms discovered during sessions
 - Keep responses concise — prefer tables and bullets over paragraphs for reference material
+
+## gstack
+Garry Tan's Claude Code skill pack, installed at `~/.claude/skills/gstack`.
+
+- For all web browsing, use the `/browse` skill — **never** use `mcp__claude-in-chrome__*` tools.
+- Available slash commands (loaded from gstack):
+  - **Planning**: `/autoplan`, `/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/plan-devex-review`
+  - **Design**: `/design-consultation`, `/design-shotgun`, `/design-html`, `/design-review`
+  - **Review & QA**: `/review`, `/cso`, `/qa`, `/qa-only`, `/devex-review`
+  - **Ship**: `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`
+  - **Browser**: `/browse`, `/connect-chrome`, `/setup-browser-cookies`
+  - **Lifecycle**: `/setup-deploy`, `/setup-gbrain`, `/retro`, `/investigate`, `/document-release`, `/learn`
+  - **Safety/locks**: `/careful`, `/freeze`, `/guard`, `/unfreeze`
+  - **Misc**: `/codex`, `/gstack-upgrade`
+- Update with `/gstack-upgrade` (or `cd ~/.claude/skills/gstack && git pull && ./setup`).
