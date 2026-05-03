@@ -114,7 +114,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"~/.claude/hooks/gsd-check-update.js\""
+            "command": "node \"$HOME/.claude/hooks/gsd-check-update.js\""
           }
         ]
       },
@@ -122,7 +122,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"~/.claude/hooks/gsd-session-state.sh\""
+            "command": "bash \"$HOME/.claude/hooks/gsd-session-state.sh\""
           }
         ]
       }
@@ -133,7 +133,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"~/.claude/hooks/gsd-context-monitor.js\"",
+            "command": "node \"$HOME/.claude/hooks/gsd-context-monitor.js\"",
             "timeout": 10
           }
         ]
@@ -143,7 +143,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"~/.claude/hooks/gsd-phase-boundary.sh\"",
+            "command": "bash \"$HOME/.claude/hooks/gsd-phase-boundary.sh\"",
             "timeout": 5
           }
         ]
@@ -155,7 +155,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"~/.claude/hooks/gsd-prompt-guard.js\"",
+            "command": "node \"$HOME/.claude/hooks/gsd-prompt-guard.js\"",
             "timeout": 5
           }
         ]
@@ -165,7 +165,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"~/.claude/hooks/gsd-read-guard.js\"",
+            "command": "node \"$HOME/.claude/hooks/gsd-read-guard.js\"",
             "timeout": 5
           }
         ]
@@ -175,7 +175,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"~/.claude/hooks/gsd-workflow-guard.js\"",
+            "command": "node \"$HOME/.claude/hooks/gsd-workflow-guard.js\"",
             "timeout": 5
           }
         ]
@@ -185,7 +185,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"~/.claude/hooks/gsd-validate-commit.sh\"",
+            "command": "bash \"$HOME/.claude/hooks/gsd-validate-commit.sh\"",
             "timeout": 5
           }
         ]
@@ -194,7 +194,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node \"~/.claude/hooks/gsd-statusline.js\""
+    "command": "node \"$HOME/.claude/hooks/gsd-statusline.js\""
   },
   "enabledPlugins": {
     "sales@knowledge-work-plugins": true,
@@ -228,12 +228,12 @@
       "hooks": [
         {
           "type": "command",
-          "command": "bash ~/.claude/hooks/pre-compact-snapshot.sh",
+          "command": "bash $HOME/.claude/hooks/pre-compact-snapshot.sh",
           "timeout": 10
         },
         {
           "type": "command",
-          "command": "bash ~/.claude/hooks/compact-logger.sh",
+          "command": "bash $HOME/.claude/hooks/compact-logger.sh",
           "timeout": 10
         }
       ]
@@ -245,7 +245,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "bash ~/.claude/hooks/session-end-logger.sh",
+          "command": "bash $HOME/.claude/hooks/session-end-logger.sh",
           "timeout": 15
         }
       ]
