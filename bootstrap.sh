@@ -6,7 +6,7 @@
 set -euo pipefail
 
 DOTFILES="${DOTFILES:-$HOME/projects/dotfiles}"
-STOW_PACKAGES=(zsh brew git starship)
+STOW_PACKAGES=(zsh brew git starship claude)
 BREWFILE="$DOTFILES/brew/.Brewfile"
 
 log()  { printf "\033[1;34m==>\033[0m %s\n" "$*"; }
@@ -89,6 +89,12 @@ if [[ -x "$(brew --prefix)/opt/fzf/install" && ! -f "$HOME/.fzf.zsh" ]]; then
   "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc --no-bash --no-fish
 fi
 
+# Claude Code: install via npm if missing (config is stowed from claude/ package)
+if command -v node >/dev/null 2>&1 && ! command -v claude >/dev/null 2>&1; then
+  log "Installing Claude Code (npm)..."
+  npm install -g @anthropic-ai/claude-code
+fi
+
 cat <<'POST'
 
 ============================================================
@@ -121,6 +127,14 @@ cat <<'POST'
 
  EDITOR
    - Open VS Code, sign in, enable Settings Sync to pull your settings/keybindings.
+
+ CLAUDE CODE
+   - Authenticate:                        claude login
+   - First run will auto-install plugins from ~/.claude/settings.json
+     (sales@knowledge-work-plugins, open-tax@open-tax-marketplace,
+      superpowers@claude-plugins-official). Confirm prompts as they appear.
+   - Skills/plugins from those marketplaces auto-restore on first plugin sync —
+     they're not committed to the dotfiles repo (too large).
 
  Restart your shell or run: exec zsh -l
 ============================================================

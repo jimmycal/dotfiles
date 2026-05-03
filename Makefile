@@ -1,6 +1,6 @@
 .PHONY: bootstrap stow unstow restow update sync brewfile-dump brewfile-check brewfile-drift
 
-PACKAGES := zsh brew git starship
+PACKAGES := zsh brew git starship claude
 BREWFILE := $(CURDIR)/brew/.Brewfile
 
 # Run the full fresh-Mac setup

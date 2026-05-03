@@ -1,0 +1,31 @@
+# Ephemeral state — never commit, even if cp gets aggressive
+projects/
+sessions/
+session-env/
+shell-snapshots/
+todos/
+tasks/
+plans/
+backups/
+cache/
+telemetry/
+debug/
+downloads/
+paste-cache/
+chrome/
+ide/
+.history/
+
+# Plugins and skills are restored from marketplaces via settings.json
+plugins/
+skills/
+
+# Per-machine state files
+history.jsonl
+session-context.json
+compact-log.json
+stats-cache.json
+mcp-needs-auth-cache.json
+gsd-file-manifest.json
+package.json
+get-shit-done/
