@@ -198,7 +198,6 @@
   },
   "enabledPlugins": {
     "sales@knowledge-work-plugins": true,
-    "open-tax@open-tax-marketplace": true,
     "superpowers@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
@@ -221,6 +220,7 @@
       }
     }
   },
+  "theme": "dark-daltonized",
   "defaultMode": "acceptEdits",
   "PreCompact": [
     {
@@ -250,6 +250,5 @@
         }
       ]
     }
-  ],
-  "theme": "dark-daltonized"
+  ]
 }
