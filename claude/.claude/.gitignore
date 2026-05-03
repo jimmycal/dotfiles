@@ -26,5 +26,4 @@ session-context.json
 compact-log.json
 stats-cache.json
 mcp-needs-auth-cache.json
-gsd-file-manifest.json
 package.json
