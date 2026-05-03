@@ -95,6 +95,26 @@ if command -v node >/dev/null 2>&1 && ! command -v claude >/dev/null 2>&1; then
   npm install -g @anthropic-ai/claude-code
 fi
 
+# Bun: install via official installer if missing (gstack and other tools need it)
+if ! command -v bun >/dev/null 2>&1 && [[ ! -x "$HOME/.bun/bin/bun" ]]; then
+  log "Installing bun..."
+  curl -fsSL https://bun.sh/install | bash
+fi
+[[ -x "$HOME/.bun/bin/bun" ]] && export PATH="$HOME/.bun/bin:$PATH"
+
+# gstack: Garry Tan's Claude Code skill pack (https://github.com/garrytan/gstack)
+# Installs to ~/.claude/skills/gstack and registers slash commands like /browse,
+# /cso, /review, /ship, /autoplan, /office-hours.
+if [[ ! -d "$HOME/.claude/skills/gstack" ]] && command -v bun >/dev/null 2>&1; then
+  log "Installing gstack..."
+  git clone --single-branch --depth 1 \
+    https://github.com/garrytan/gstack.git \
+    "$HOME/.claude/skills/gstack"
+  ( cd "$HOME/.claude/skills/gstack" && ./setup )
+elif [[ -d "$HOME/.claude/skills/gstack" ]]; then
+  log "gstack already installed at ~/.claude/skills/gstack — skipping"
+fi
+
 cat <<'POST'
 
 ============================================================
@@ -121,9 +141,13 @@ cat <<'POST'
    - nvm install <version>              then `nvm alias default <version>`
    - rbenv install <version>            then `rbenv global <version>`
 
- NOT IN BREWFILE (install separately)
-   - Bun:      curl -fsSL https://bun.sh/install | bash
-   - Bun completions land in ~/.bun and are sourced by .zshrc.
+ AUTO-INSTALLED BY THIS SCRIPT (skipped if already present)
+   - Claude Code (npm): @anthropic-ai/claude-code
+   - Bun (curl install): completions land in ~/.bun, sourced by .zshrc
+   - gstack (Garry Tan's Claude Code skill pack):
+       cloned to ~/.claude/skills/gstack and registered via ./setup
+       Adds /browse, /cso, /review, /ship, /qa, /autoplan, /office-hours,
+       /plan-ceo-review, /design-review, /retro, etc.
 
  EDITOR
    - Open VS Code, sign in, enable Settings Sync to pull your settings/keybindings.
